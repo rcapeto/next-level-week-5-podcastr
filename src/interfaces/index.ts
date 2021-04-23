@@ -1,4 +1,4 @@
-import { ReactChild } from "react"
+import { ReactNode } from "react"
 
 export type HomeProps = {
    episodes: Episode[];
@@ -28,7 +28,7 @@ export type EpisodeProps = {
 }
 
 export interface PlayerContextContainerProps {
-   children: ReactChild;
+   children: ReactNode;
 }
 
 export type PlayerContextData = {
@@ -36,6 +36,16 @@ export type PlayerContextData = {
    currentEpisodeIndex: number; 
    play: (episode: Episode) => void;
    isPlaying: boolean;
+   isLooping: boolean;
+   isShuffling: boolean;
    togglePlay: () => void;
+   toggleLoop: () => void;
+   toggleShuffle: () => void;
    setPlayingState: (state: boolean) => void;
+   playList: (list: Episode[], index: number) => void;
+   playNext: () => void;
+   playPrevious: () => void;
+   clearPlayerDisplay: () => void;
+   hasPrevious: boolean;
+   hasNext: boolean;
 }
