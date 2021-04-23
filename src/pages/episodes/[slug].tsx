@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+// import { useRouter } from 'next/router';
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
@@ -10,6 +11,13 @@ import { EpisodeProps } from '../../interfaces';
 import styles from './episode.module.scss';
 
 export default function Episode({ episode }: EpisodeProps) {
+   // const router = useRouter();
+
+   //quando o fallback do getStaticPaths for true(porque a requisição é pelo frontend)
+   // if(router.isFallback) {
+   //    return <p>Carregando...</p>
+   // }
+
    return(
       <div className={styles.episode}>
          <div className={styles.thumbnailContainer}>
@@ -42,13 +50,34 @@ export default function Episode({ episode }: EpisodeProps) {
    );
 }
 
-//Porque é uma página estática e dinâmica
 export const getStaticPaths: GetStaticPaths = async () => {
+   const { data } = await api.get('episodes', {
+      params: {
+         _limit: 2,
+         _sort: 'published_at',
+         _order: 'desc'
+      }
+   });
+
+   const paths = data.map(episode => ({
+      params: {
+         slug: episode.id
+      }
+   }));
+
    return {
-      paths: [],
+      paths,
       fallback: 'blocking'
    }
+   //Os dois primeiros vão ser carregados e assim que carregados vão ficar estáticos
 }
+
+/**
+ * fallback => false (não roda nenhuma página)
+ * fallback => true (a chamada do getStaticProps vai ser executado pelo lado do client)
+ * fallback => 'blocking' (executado no lado do "server" e vai abrir qualquer página)
+ *    só vai ser navegar para a próxima tela quando estiver tudo carregado.
+ */
 
 export const getStaticProps: GetStaticProps = async (context) => {
    const { slug } = context.params;

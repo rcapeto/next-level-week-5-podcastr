@@ -1,3 +1,5 @@
+import { ReactChild } from "react"
+
 export type HomeProps = {
    episodes: Episode[];
    allEpisodes: Episode[];
@@ -16,11 +18,24 @@ export type Episode = {
      type: string;
      duration: number;
    }
-   duration: string;
+   duration: number;
    durationAsString: string;
    url: string;
 }
 
 export type EpisodeProps = {
    episode: Episode;
+}
+
+export interface PlayerContextContainerProps {
+   children: ReactChild;
+}
+
+export type PlayerContextData = {
+   episodeList: Episode[];
+   currentEpisodeIndex: number; 
+   play: (episode: Episode) => void;
+   isPlaying: boolean;
+   togglePlay: () => void;
+   setPlayingState: (state: boolean) => void;
 }

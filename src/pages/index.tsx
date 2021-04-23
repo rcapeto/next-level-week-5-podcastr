@@ -4,14 +4,16 @@ import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
-
 import api from '../services/api';
-import { convertDurationToTimeString } from '../utils';
-import styles from './home.module.scss';
 import { HomeProps } from '../interfaces';
+import { convertDurationToTimeString } from '../utils';
+import { usePlayer } from '../contexts/PlayerContext';
 
+import styles from './home.module.scss';
 
 export default function Home({ allEpisodes, latestEpisodes }: HomeProps) {
+  const { play } = usePlayer();
+
   return(
     <div className={styles.homePage}>
       <section className={styles.latestEpisodes}>
@@ -36,7 +38,7 @@ export default function Home({ allEpisodes, latestEpisodes }: HomeProps) {
                 <span>{episode.durationAsString}</span>
               </div>  
 
-              <button>
+              <button onClick={() => play(episode)}>
                 <img src="/play-green.svg" alt="Tocar episódio"/>
               </button>
             </li>
